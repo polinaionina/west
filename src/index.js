@@ -62,7 +62,9 @@ class Dog extends Creature {
 
 class Trasher extends Dog {
     constructor() {
-        super('Громила', 5);
+        super();
+        this.name = 'Громила';
+        this.maxPower = 5;
     }
 
     modifyTakenDamage(value, fromCard, gameContext, continuation) {
