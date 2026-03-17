@@ -27,7 +27,20 @@ function getCreatureDescription(card) {
     return 'Существо';
 }
 
-class Duck extends Card {
+class Creature extends Card {
+    constructor(name, maxPower, image) {
+        super(name, maxPower, image);
+    }
+
+    getDescriptions() {
+        return [
+            getCreatureDescription(this),
+             ...super.getDescriptions()
+        ];
+    }
+}
+
+class Duck extends Creature {
     constructor() {
         super('Мирная утка', 2);
     }
@@ -41,7 +54,7 @@ class Duck extends Card {
     }
 }
 
-class Dog extends Card {
+class Dog extends Creature {
     constructor() {
         super('Пес-бандит', 3);
     }
@@ -50,14 +63,14 @@ class Dog extends Card {
 
 // Колода Шерифа, нижнего игрока.
 const seriffStartDeck = [
-    new Card('Мирный житель', 2),
-    new Card('Мирный житель', 2),
-    new Card('Мирный житель', 2),
+    new Duck(),
+    new Duck(),
+    new Duck(),
 ];
 
 // Колода Бандита, верхнего игрока.
 const banditStartDeck = [
-    new Card('Бандит', 3),
+    new Dog(),
 ];
 
 
