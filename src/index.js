@@ -79,7 +79,6 @@ class Trasher extends Dog {
     }
 }
 
-
 class Gatling extends Creature {
     constructor() {
         super('Гатлинг', 6);
@@ -87,6 +86,7 @@ class Gatling extends Creature {
 
     attack(gameContext, continuation) {
         const taskQueue = new TaskQueue();
+        const { oppositePlayer } = gameContext;
 
         for (const card of gameContext.oppositePlayer.table) {
             if (card) {
@@ -95,6 +95,53 @@ class Gatling extends Creature {
         }
 
         taskQueue.continueWith(continuation);
+    }
+}
+
+class Lad extends Dog {
+    constructor() {
+        super();
+        this.name = 'Браток';
+        this.maxPower = this.currentPower = 2;
+        this.updateView();
+    }
+
+    static getInGameCount() {
+        return this.inGameCount || 0;
+    }
+
+    static setInGameCount(value) {
+        this.inGameCount = value;
+    }
+
+    static getBonus() {
+        const count = this.getInGameCount();
+        return count * (count + 1) / 2;
+    }
+
+    doAfterComingIntoPlay(gameContext, continuation) {
+        this.constructor.setInGameCount(this.constructor.getInGameCount() + 1);
+        continuation();
+    }
+
+    doBeforeRemoving(continuation) {
+        this.constructor.setInGameCount(this.constructor.getInGameCount() - 1);
+        continuation();
+    }
+
+    modifyDealedDamageToCreature(value, toCard, gameContext, continuation) {
+        continuation(value + this.constructor.getBonus());
+    }
+
+    modifyTakenDamage(value, fromCard, gameContext, continuation) {
+        continuation(Math.max(0, value - this.constructor.getBonus()));
+    }
+
+    getDescriptions() {
+        return [
+            'Чем их больше, тем они сильнее',
+            ...super.getDescriptions()
+        ];
     }
 }
 
