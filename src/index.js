@@ -85,7 +85,6 @@ class Gatling extends Creature {
 
     attack(gameContext, continuation) {
         const taskQueue = new TaskQueue();
-        const { oppositePlayer } = gameContext;
 
         for (const card of gameContext.oppositePlayer.table) {
             if (card) {
